@@ -20,7 +20,7 @@ func (e er) Error() string {
 
 func scanStrings(in io.Reader) ([]string, error) {
 	bytes, err := ioutil.ReadAll(in)
-	if err == nil {
+	if err != nil {
 		return nil, er{1}
 	}
 
