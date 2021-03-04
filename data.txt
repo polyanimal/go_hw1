@@ -1,9 +1,9 @@
-I love music.
-He love music.
-We love music.
+a b xxxI LOVE MUSIC.
+a b xxxI love music.
+a b xxxI LoVe MuSiC.
 
-I love music of Kartik.
-U love music of Kartik.
-Thanks.
-I love music of Kartik.
-Dont love music of Kartik.
+a b xxxI love MuSIC of Kartik.
+a b xxxI love music of kartik.
+a b xxxThanks.
+a b xxxI love music of kartik.
+a b xxxI love MuSIC of Kartik.

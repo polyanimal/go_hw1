@@ -1,14 +1,14 @@
 package main
 
 import (
-	u "uniq"
 	"bufio"
 	"flag"
-	"fmt"
+	. "github.com/polyanimal/go_hw1/uniq"
 	"io"
 	"log"
 	"os"
 )
+
 
 func main() {
 	cFlag := flag.Bool("c", false, "Count occurrences")
@@ -58,7 +58,7 @@ func main() {
 	}
 
 	ss := scanStrings(in)
-	res := u.Uniq(ss, u.Args{
+	res := Uniq(ss, Args{
 		Count:           *cFlag,
 		Duplicates:      *dFlag,
 		Uniq:            *uFlag,
@@ -66,8 +66,6 @@ func main() {
 		FieldsNum:       *fNum,
 		CharsNum:        *sNum,
 	})
-
-	fmt.Println("asdasd")
 
 	printSs(res, out)
 	return
