@@ -1,31 +1,16 @@
 package main
 
-import (
-	"io"
-	"os"
-)
-
-func t(out io.Writer) {
-	io.WriteString(out, "s")
-}
+import "fmt"
 
 func main() {
+	count := make([]int, 0)
+	l := 0
 
-	//inputFile := "data.txt"
-	//outputFile := "лул.txt"
+	for i :=0; i < 10; i++{
+		count = append(count, 1)
+		count[l]++
+		l++
+	}
 
-	//in, _  := os.Open(inputFile)
-	out, _ := os.Create("go.txt")
-
-	t(out)
-
-	//scanner := bufio.NewScanner(in)
-	////writer := bufio.NewWriter(out)
-	//for scanner.Scan() {
-	//	s := scanner.Text()
-	//	_, err :=  out.WriteString(s)
-	//	if err != nil{
-	//		fmt.Println(err)
-	//	}
-	//}
+	fmt.Print(count)
 }

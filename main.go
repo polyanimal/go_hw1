@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -33,20 +34,50 @@ func (a *Args) key(s string) string {
 	return k
 }
 
-func uniq(ss []string, a Args) ([]string, map[string]int) {
+func uniq(ss []string, a Args) []string {
+	count  := make([]int,    0)
 	output := make([]string, 0)
-	m := make(map[string]int)
+	res    := make([]string, 0)
+
 	prev := ""
+	l := -1
 
 	for _, s := range ss {
-		m[a.key(s)]++
 		if a.key(s) != a.key(prev) {
 			prev = s
+			count = append(count, 1)
 			output = append(output, s)
+			l++
+		} else {
+			count[l]++
 		}
 	}
 
-	return output, m
+	if a.count {
+		for i, s := range output {
+			res = append(res, strconv.Itoa(count[i]) + " " + s)
+		}
+	} else if a.duplicates {
+		for i, s := range output {
+			if count[i] > 1 {
+				res = append(res, s)
+			}
+		}
+	} else if a.uniq {
+		for i, s := range output {
+			if count[i] == 1 {
+				res = append(res, s)
+			}
+		}
+	} else {
+		res = output
+	}
+
+	if len(res) > 0{
+		res[len(res) - 1] = strings.TrimSuffix(res[len(res) - 1], "\n")
+	}
+
+	return res
 }
 
 func main() {
@@ -54,8 +85,8 @@ func main() {
 	dFlag := flag.Bool("d", false, "Duplicated strings")
 	uFlag := flag.Bool("u", false, "Unique strings")
 	iFlag := flag.Bool("i", false, "Case insensitive")
-	fNum := flag.Int("f", 0, "Skip first N words")
-	sNum := flag.Int("s", 0, "Skip first N symbols")
+	fNum  := flag.Int("f", 0, "Skip first N words")
+	sNum  := flag.Int("s", 0, "Skip first N symbols")
 
 	flag.Parse()
 	if *cFlag && *dFlag || *cFlag && *uFlag || *dFlag && *uFlag {
@@ -97,7 +128,7 @@ func main() {
 	}
 
 	ss := scanStrings(in)
-	res, _ := uniq(ss, Args{
+	res := uniq(ss, Args{
 		count:           *cFlag,
 		duplicates:      *dFlag,
 		uniq:            *uFlag,
@@ -122,7 +153,10 @@ func scanStrings(in io.Reader) []string {
 }
 
 func printSs(ss []string, out io.Writer) {
+	//for _, i := range c {
+	//	io.WriteString(out, strconv.Itoa(i))
+	//}
 	for _, s := range ss {
-		io.WriteString(out, s)
+		io.WriteString(out,s)
 	}
 }
