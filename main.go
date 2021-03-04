@@ -10,24 +10,24 @@ import (
 )
 
 type Args struct {
-	c, d, u, i bool
-	f, s int
-	inputFile, outputFile string
+	count, duplicates, uniq, caseInsensitive bool
+	fieldsNum, charsNum                      int
+	inputFile, outputFile                    string
 }
 
 func (a * Args) key(s string) string {
 	k := ""
 
 	fields := strings.Fields(s)
-	if a.f <= len(fields) {
-		k = strings.Join(fields[a.f:], "")
+	if a.fieldsNum <= len(fields) {
+		k = strings.Join(fields[a.fieldsNum:], "")
 	}
 
-	if a.s <= len(k) {
-		k = k[a.s:]
+	if a.charsNum <= len(k) {
+		k = k[a.charsNum:]
 	}
 
-	if a.i {
+	if a.caseInsensitive {
 		k = strings.ToLower(k)
 	}
 
@@ -53,15 +53,15 @@ func uniq(strs []string, a Args) ([]string, map[string]int) {
 func main() {
 	in := os.Stdin
 
-	//cFlag := flag.Bool("-c", false, "Count occurrences")
-	//dFlag := flag.Bool("-d", false, "Duplicated strings")
-	//uFlag := flag.Bool("-c", false, "Unique strings")
-	//iFlag := flag.Bool("-i", false, "Case insensitive")
+	//cFlag := flag.Bool("-count", false, "Count occurrences")
+	//dFlag := flag.Bool("-duplicates", false, "Duplicated strings")
+	//uFlag := flag.Bool("-count", false, "Unique strings")
+	//iFlag := flag.Bool("-caseInsensitive", false, "Case insensitive")
 
-	//fFlag := flag.Int("-f", 0, "Skip first N words")
-	//sFlag := flag.Int("-s", 0, "Skip first N symbols")
+	//fFlag := flag.Int("-fieldsNum", 0, "Skip first N words")
+	//sFlag := flag.Int("-charsNum", 0, "Skip first N symbols")
 
-	//inputFile := flag.String("input_file", "", "i")
+	//inputFile := flag.String("input_file", "", "caseInsensitive")
 	//outputFile := flag.String("output_file", "", "o")
 
 	strs, err := scanStrings(in)
@@ -70,14 +70,14 @@ func main() {
 	}
 
 	res, _ := uniq(strs, Args{
-		c:          false,
-		d:          false,
-		u:          false,
-		i:          false,
-		f:          0,
-		s:          0,
-		inputFile:  "",
-		outputFile: "",
+		count:           false,
+		duplicates:      false,
+		uniq:            false,
+		caseInsensitive: false,
+		fieldsNum:       0,
+		charsNum:        0,
+		inputFile:       "",
+		outputFile:      "",
 	})
 
 
