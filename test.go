@@ -2,17 +2,16 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 func main() {
-	s := "1"
+	s := "2 3 2"
+	fmt.Println(s[6:])
 
-	z := strings.Fields(s)
+	//z := strings.Fields(s)
+	//fmt.Println(z[3:])
 
 	//for i := range z {
 	//	fmt.Printf("%s\n", z[i])
 	//}
-
-	fmt.Println(len(z))
 }

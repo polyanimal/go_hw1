@@ -9,46 +9,45 @@ import (
 	"strings"
 )
 
-func scanStrings(in io.Reader) ([]string, error) {
-	bytes, err := ioutil.ReadAll(in)
-	if err != nil {
-		return nil, err
-	}
-
-	return strings.SplitAfter(string(bytes), "\n"), nil
+type Args struct {
+	c, d, u, i bool
+	f, s int
+	inputFile, outputFile string
 }
 
-func key(s string, f int, c int, i bool ) string {
-	k := strings.Join(strings.Fields(s)[f:], "")
-	k = k[c:]
-	if i {
+func (a * Args) key(s string) string {
+	k := ""
+
+	fields := strings.Fields(s)
+	if a.f <= len(fields) {
+		k = strings.Join(fields[a.f:], "")
+	}
+
+	if a.s <= len(k) {
+		k = k[a.s:]
+	}
+
+	if a.i {
 		k = strings.ToLower(k)
 	}
 
 	return k
 }
 
-func uniq(strs []string) ([]string, map[string]int) {
+func uniq(strs []string, a Args) ([]string, map[string]int) {
 	output := make([]string, 0)
 	m := make(map[string]int)
 	prev := ""
 
 	for _, s := range strs {
-		m[key(s, 1, 0, false)]++
-		if key(s, 1, 0, false) != key(prev, 1, 0, false) {
+		m[a.key(s)]++
+		if a.key(s) != a.key(prev) {
 			prev = s
 			output = append(output, s)
 		}
 	}
 
 	return output, m
-}
-
-func print(strs []string) {
-	fmt.Println("----------------")
-	for _, s := range strs {
-		fmt.Print(s)
-	}
 }
 
 func main() {
@@ -70,9 +69,35 @@ func main() {
 		log.Fatal(err)
 	}
 
-	res, _ := uniq(strs)
+	res, _ := uniq(strs, Args{
+		c:          false,
+		d:          false,
+		u:          false,
+		i:          false,
+		f:          0,
+		s:          0,
+		inputFile:  "",
+		outputFile: "",
+	})
 
 
 	fmt.Println(res)
 	return
+}
+
+
+func scanStrings(in io.Reader) ([]string, error) {
+	bytes, err := ioutil.ReadAll(in)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.SplitAfter(string(bytes), "\n"), nil
+}
+
+func printSs(strs []string) {
+	fmt.Println("----------------")
+	for _, s := range strs {
+		fmt.Print(s)
+	}
 }
