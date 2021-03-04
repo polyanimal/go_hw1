@@ -1,17 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 )
 
 func main() {
-	s := "2 3 2"
-	fmt.Println(s[6:])
-
-	//z := strings.Fields(charsNum)
-	//fmt.Println(z[3:])
-
-	//for caseInsensitive := range z {
-	//	fmt.Printf("%charsNum\n", z[caseInsensitive])
-	//}
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text()) // Println will add back the final '\n'
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "reading standard input:", err)
+	}
 }

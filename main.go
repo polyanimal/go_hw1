@@ -1,10 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
-	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 )
@@ -64,12 +63,12 @@ func main() {
 	//inputFile := flag.String("input_file", "", "caseInsensitive")
 	//outputFile := flag.String("output_file", "", "o")
 
-	strs, err := scanStrings(in)
-	if err != nil {
-		log.Fatal(err)
-	}
+	ss := scanStrings(in)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 
-	res, _ := uniq(strs, Args{
+	res, _ := uniq(ss, Args{
 		count:           false,
 		duplicates:      false,
 		uniq:            false,
@@ -81,18 +80,21 @@ func main() {
 	})
 
 
-	fmt.Println(res)
+	//fmt.Println(res)
+	printSs(res)
 	return
 }
 
 
-func scanStrings(in io.Reader) ([]string, error) {
-	bytes, err := ioutil.ReadAll(in)
-	if err != nil {
-		return nil, err
+func scanStrings(in io.Reader) ([]string) {
+	ss := make([]string, 0)
+	scanner := bufio.NewScanner(os.Stdin)
+
+	for scanner.Scan() {
+		ss = append(ss, scanner.Text() + "\n")
 	}
 
-	return strings.SplitAfter(string(bytes), "\n"), nil
+	return ss
 }
 
 func printSs(strs []string) {
