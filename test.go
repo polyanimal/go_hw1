@@ -1,17 +1,31 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
+	"io"
 	"os"
 )
 
+func t(out io.Writer) {
+	io.WriteString(out, "s")
+}
+
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		fmt.Println(scanner.Text()) // Println will add back the final '\n'
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, "reading standard input:", err)
-	}
+
+	//inputFile := "data.txt"
+	//outputFile := "лул.txt"
+
+	//in, _  := os.Open(inputFile)
+	out, _ := os.Create("go.txt")
+
+	t(out)
+
+	//scanner := bufio.NewScanner(in)
+	////writer := bufio.NewWriter(out)
+	//for scanner.Scan() {
+	//	s := scanner.Text()
+	//	_, err :=  out.WriteString(s)
+	//	if err != nil{
+	//		fmt.Println(err)
+	//	}
+	//}
 }

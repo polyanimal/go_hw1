@@ -2,8 +2,9 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"flag"
 	"io"
+	"log"
 	"os"
 	"strings"
 )
@@ -11,10 +12,9 @@ import (
 type Args struct {
 	count, duplicates, uniq, caseInsensitive bool
 	fieldsNum, charsNum                      int
-	inputFile, outputFile                    string
 }
 
-func (a * Args) key(s string) string {
+func (a *Args) key(s string) string {
 	k := ""
 
 	fields := strings.Fields(s)
@@ -33,12 +33,12 @@ func (a * Args) key(s string) string {
 	return k
 }
 
-func uniq(strs []string, a Args) ([]string, map[string]int) {
+func uniq(ss []string, a Args) ([]string, map[string]int) {
 	output := make([]string, 0)
 	m := make(map[string]int)
 	prev := ""
 
-	for _, s := range strs {
+	for _, s := range ss {
 		m[a.key(s)]++
 		if a.key(s) != a.key(prev) {
 			prev = s
@@ -50,56 +50,79 @@ func uniq(strs []string, a Args) ([]string, map[string]int) {
 }
 
 func main() {
+	cFlag := flag.Bool("c", false, "Count occurrences")
+	dFlag := flag.Bool("d", false, "Duplicated strings")
+	uFlag := flag.Bool("u", false, "Unique strings")
+	iFlag := flag.Bool("i", false, "Case insensitive")
+	fNum := flag.Int("f", 0, "Skip first N words")
+	sNum := flag.Int("s", 0, "Skip first N symbols")
+
+	flag.Parse()
+	if *cFlag && *dFlag || *cFlag && *uFlag || *dFlag && *uFlag {
+		log.Fatal("\nFlags -c, -d and -u are exclusive and can't be used together\n")
+	}
+	if *fNum < 0 {
+		log.Fatalf("\n%d : invalid number of fields to skip\n", *fNum)
+	}
+	if *sNum < 0 {
+		log.Fatalf("\n%d : invalid number of bytes to skip\n", *sNum)
+	}
+
 	in := os.Stdin
+	out := os.Stdout
 
-	//cFlag := flag.Bool("-count", false, "Count occurrences")
-	//dFlag := flag.Bool("-duplicates", false, "Duplicated strings")
-	//uFlag := flag.Bool("-count", false, "Unique strings")
-	//iFlag := flag.Bool("-caseInsensitive", false, "Case insensitive")
+	inputFile := ""
+	outputFile := ""
+	if len(flag.Args()) > 0 {
+		inputFile = flag.Args()[0]
+	}
+	if len(flag.Args()) > 1 {
+		outputFile = flag.Args()[1]
+	}
 
-	//fFlag := flag.Int("-fieldsNum", 0, "Skip first N words")
-	//sFlag := flag.Int("-charsNum", 0, "Skip first N symbols")
+	var err error = nil
+	if inputFile != "" {
+		in, err = os.Open(inputFile)
 
-	//inputFile := flag.String("input_file", "", "caseInsensitive")
-	//outputFile := flag.String("output_file", "", "o")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	if outputFile != "" {
+		out, err = os.Create(outputFile)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	ss := scanStrings(in)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-
 	res, _ := uniq(ss, Args{
-		count:           false,
-		duplicates:      false,
-		uniq:            false,
-		caseInsensitive: false,
-		fieldsNum:       0,
-		charsNum:        0,
-		inputFile:       "",
-		outputFile:      "",
+		count:           *cFlag,
+		duplicates:      *dFlag,
+		uniq:            *uFlag,
+		caseInsensitive: *iFlag,
+		fieldsNum:       *fNum,
+		charsNum:        *sNum,
 	})
 
-
-	//fmt.Println(res)
-	printSs(res)
+	printSs(res, out)
 	return
 }
 
-
-func scanStrings(in io.Reader) ([]string) {
+func scanStrings(in io.Reader) []string {
 	ss := make([]string, 0)
-	scanner := bufio.NewScanner(os.Stdin)
+	scanner := bufio.NewScanner(in)
 
 	for scanner.Scan() {
-		ss = append(ss, scanner.Text() + "\n")
+		ss = append(ss, scanner.Text()+"\n")
 	}
 
 	return ss
 }
 
-func printSs(strs []string) {
-	fmt.Println("----------------")
-	for _, s := range strs {
-		fmt.Print(s)
+func printSs(ss []string, out io.Writer) {
+	for _, s := range ss {
+		io.WriteString(out, s)
 	}
 }
