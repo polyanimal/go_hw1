@@ -11,14 +11,14 @@ type Args struct {
 }
 
 func (a *Args) key(s string) string {
-	k := ""
+	k := s
 
 	fields := strings.Fields(s)
-	if a.FieldsNum <= len(fields) {
-		k = strings.Join(fields[a.FieldsNum:], "")
+	if a.FieldsNum != 0 && a.FieldsNum <= len(fields) {
+		k = strings.Join(fields[a.FieldsNum:], " ")
 	}
 
-	if a.CharsNum <= len(k) {
+	if a.CharsNum != 0 && a.CharsNum <= len(k) {
 		k = k[a.CharsNum:]
 	}
 
@@ -34,10 +34,16 @@ func Uniq(ss []string, a Args) []string {
 	output := make([]string, 0)
 	res := make([]string, 0)
 
-	prev := ""
-	l := -1
+	prev := ss[0]
+	count = append(count, 1)
+	output = append(output, ss[0])
+	l := 0
 
-	for _, s := range ss {
+	for i, s := range ss {
+		if i == 0 {
+			continue
+		}
+
 		if a.key(s) != a.key(prev) {
 			prev = s
 			count = append(count, 1)

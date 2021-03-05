@@ -37,16 +37,17 @@ Thanks.
 I love music of Kartik.
 I love music of Kartik.`
 
-	ss2 := `I love music.
+	s2 := `I love music.
 
 I love music of Kartik.
 Thanks.
 I love music of Kartik.`
 
-	ss := strings.SplitAfter(s, "\n")
+	ss := strings.Split(s, "\n")
 	res := Uniq(ss, args)
 
-	expect := strings.SplitAfter(ss2, "\n")
+	expect := strings.Split(s2, "\n")
+
 	if !reflect.DeepEqual(res, expect) {
 		t.Fatal("Unexpected result")
 	}
@@ -73,10 +74,11 @@ I love music of Kartik.`
 1 Thanks.
 2 I love music of Kartik.`
 
-	ss := strings.SplitAfter(s, "\n")
+	ss := strings.Split(s, "\n")
 	res := Uniq(ss, args)
 
-	expect := strings.SplitAfter(s2, "\n")
+	expect := strings.Split(s2, "\n")
+
 	if !reflect.DeepEqual(res, expect) {
 		t.Fatal("Unexpected result")
 	}
@@ -101,10 +103,11 @@ I love music of Kartik.`
 I love music of Kartik.
 I love music of Kartik.`
 
-	ss := strings.SplitAfter(s, "\n")
+	ss := strings.Split(s, "\n")
 	res := Uniq(ss, args)
 
-	expect := strings.SplitAfter(s2, "\n")
+	expect := strings.Split(s2, "\n")
+
 	if !reflect.DeepEqual(res, expect) {
 		t.Fatal("Unexpected result")
 	}
@@ -128,10 +131,11 @@ I love music of Kartik.`
 	s2 := `
 Thanks.`
 
-	ss := strings.SplitAfter(s, "\n")
+	ss := strings.Split(s, "\n")
 	res := Uniq(ss, args)
 
-	expect := strings.SplitAfter(s2, "\n")
+	expect := strings.Split(s2, "\n")
+
 	if !reflect.DeepEqual(res, expect) {
 		t.Fatal("Unexpected result")
 	}
@@ -158,10 +162,40 @@ I love MuSIC of Kartik.
 Thanks.
 I love music of kartik.`
 
-	ss := strings.SplitAfter(s, "\n")
+	ss := strings.Split(s, "\n")
 	res := Uniq(ss, args)
 
-	expect := strings.SplitAfter(s2, "\n")
+	expect := strings.Split(s2, "\n")
+
+	if !reflect.DeepEqual(res, expect) {
+		t.Fatal("Unexpected result")
+	}
+}
+
+func TestSflag(t *testing.T) {
+	defer resetArgs()
+
+	args.CharsNum = 3
+
+	s := `We love music.
+I  love music.
+Th love music.
+
+I love music of Kartik.
+We love music of Kartik.
+Thanks.`
+
+	s2 := `We love music.
+
+I love music of Kartik.
+We love music of Kartik.
+Thanks.`
+
+	ss := strings.Split(s, "\n")
+	res := Uniq(ss, args)
+
+	expect := strings.Split(s2, "\n")
+
 	if !reflect.DeepEqual(res, expect) {
 		t.Fatal("Unexpected result")
 	}
@@ -191,10 +225,11 @@ a b xxxI love MuSIC of Kartik.`
 1 a b xxxThanks.
 2 a b xxxI love music of kartik.`
 
-	ss := strings.SplitAfter(s, "\n")
+	ss := strings.Split(s, "\n")
 	res := Uniq(ss, args)
 
-	expect := strings.SplitAfter(s2, "\n")
+	expect := strings.Split(s2, "\n")
+
 	if !reflect.DeepEqual(res, expect) {
 		t.Fatal("Unexpected result")
 	}
