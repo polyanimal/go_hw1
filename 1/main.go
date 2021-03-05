@@ -11,15 +11,6 @@ import (
 
 
 func main() {
-	s := "(1 + )+ + 2"
-	for _, c := range s {
-		if c == '+' {
-
-		}
-	}
-	return
-
-
 	cFlag := flag.Bool("c", false, "Count occurrences")
 	dFlag := flag.Bool("d", false, "Duplicated strings")
 	uFlag := flag.Bool("u", false, "Unique strings")

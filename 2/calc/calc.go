@@ -106,15 +106,12 @@ func Calc(exp string) int {
 	s := Stack{}
 
 	for _, ch := range exp {
-		ss := string(ch)
 		if isNumber(ch) {
 			s.push(toInt(ch))
 		} else {
 			val := eval(string(ch), &s)
 			s.push(val)
 		}
-
-		ss += "2"
 	}
 
 	return s.pop().(int)
