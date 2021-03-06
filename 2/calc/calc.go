@@ -2,6 +2,7 @@ package calc
 
 import (
 	"log"
+	"strconv"
 )
 
 type Stack struct {
@@ -44,25 +45,38 @@ func priority(c string) int {
 func InfToPosf(exp string) string {
 	s := Stack{}
 	res := ""
+	numBuf := ""
+
+	flush := func(res *string, buf *string) {
+		if *buf != "" {
+			*res += *buf + " "
+			*buf = ""
+		}
+	}
 
 	for _, ch := range exp {
 		c := string(ch)
 		switch {
 		case isNumber(ch):
-			res += c
+			numBuf += c
 		case ch == '(':
+			flush(&res, &numBuf)
 			s.push(c)
 		case ch == ')':
+			flush(&res, &numBuf)
 			for s.peek() != string('(') {
-				res += s.pop().(string)
+				res += s.pop().(string) + " "
 			}
 			s.pop()
+		case ch == ' ':
+			flush(&res, &numBuf)
 		default:
+			flush(&res, &numBuf)
 			if len(s.data) == 0 {
 				s.push(c)
 			} else {
 				if priority(s.peek().(string)) >= priority(c) {
-					res += s.pop().(string)
+					res += s.pop().(string) + " "
 					s.push(c)
 				} else {
 					s.push(c)
@@ -70,9 +84,10 @@ func InfToPosf(exp string) string {
 			}
 		}
 	}
+	flush(&res, &numBuf)
 
 	for len(s.data) != 0 {
-		res += s.pop().(string)
+		res += s.pop().(string) + " "
 	}
 
 	return res
@@ -99,16 +114,31 @@ func eval(op string, s *Stack) int {
 
 func Calc(exp string) int {
 	s := Stack{}
-	//buf := ""
+	numBuf := ""
+
+	pushInt := func (s *Stack, buf *string) {
+		if *buf != "" {
+			i, err := strconv.Atoi(numBuf)
+			if err != nil {
+				log.Fatal(err)
+			}
+			s.push(i)
+
+			*buf = ""
+		}
+	}
 
 	for _, ch := range exp {
-		if isNumber(ch) {
-			//buf += string(ch)
-			s.push(toInt(ch))
-		} else {
+		switch {
+		case isNumber(ch):
+			numBuf += string(ch)
+		case ch == ' ':
+			pushInt(&s, &numBuf)
+		default:
 			val := eval(string(ch), &s)
 			s.push(val)
 		}
+
 	}
 
 	return s.pop().(int)

@@ -30,8 +30,8 @@ func (a *Args) key(s string) string {
 }
 
 func Uniq(ss []string, a Args) []string {
-	count := make([]int, 0)
 	output := make([]string, 0)
+	count := make([]int, 0)
 	res := make([]string, 0)
 
 	prev := ss[0]
@@ -54,7 +54,7 @@ func Uniq(ss []string, a Args) []string {
 		}
 	}
 
-	switch  {
+	switch {
 	case a.Count:
 		for i, s := range output {
 			res = append(res, strconv.Itoa(count[i])+" "+s)
