@@ -1,9 +1,9 @@
-a b xxxI LOVE MUSIC.
-a b xxxI love music.
-s v zzzI LoVe MuSiC.
+i love music.
+fl love music.
+t  love music.
 
-a b xxxI love MuSIC of Kartik.
-a b xxxI love music of kartik.
-a b xxxThanks.
-a b xxxI love music of kartik.
-a b xxxI love MuSIC of Kartik.
+I love music of Kartik.
+We fove music of Kartik.
+лол
+Thanks.
+лул

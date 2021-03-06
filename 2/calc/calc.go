@@ -160,7 +160,6 @@ func Calc(exp string) (int, error) {
 			}
 			s.push(val)
 		}
-
 	}
 
 	return s.pop().(int), nil
