@@ -54,23 +54,24 @@ func Uniq(ss []string, a Args) []string {
 		}
 	}
 
-	if a.Count { // TODO switch
+	switch  {
+	case a.Count:
 		for i, s := range output {
 			res = append(res, strconv.Itoa(count[i])+" "+s)
 		}
-	} else if a.Duplicates {
+	case a.Duplicates:
 		for i, s := range output {
 			if count[i] > 1 {
 				res = append(res, s)
 			}
 		}
-	} else if a.Uniq {
+	case a.Uniq:
 		for i, s := range output {
 			if count[i] == 1 {
 				res = append(res, s)
 			}
 		}
-	} else {
+	default:
 		res = output
 	}
 
