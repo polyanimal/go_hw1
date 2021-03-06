@@ -1,6 +1,7 @@
 package calc
 
 import (
+	"errors"
 	"log"
 	"strconv"
 )
@@ -42,7 +43,27 @@ func priority(c string) int {
 	return -1
 }
 
-func InfToPosf(exp string) string {
+func checkParenthesis(s string) bool {
+	counter := 0
+	for _, c := range s {
+		switch {
+		case counter < 0:
+			return false
+		case c == '(':
+			counter++
+		case c == ')':
+			counter--
+		}
+	}
+
+	return counter == 0
+}
+
+func InfToPosf(exp string) (string, error) {
+	if !checkParenthesis(exp) {
+		return "", errors.New("bad syntax: parenthesis don't match")
+	}
+
 	s := Stack{}
 	res := ""
 	numBuf := ""
@@ -90,33 +111,31 @@ func InfToPosf(exp string) string {
 		res += s.pop().(string) + " "
 	}
 
-	return res
+	return res, nil
 }
 
-func eval(op string, s *Stack) int {
+func eval(op string, s *Stack) (int, error) {
 	switch op {
 	case "+":
-		return s.pop().(int) + s.pop().(int)
+		return s.pop().(int) + s.pop().(int), nil
 	case "*":
-		return s.pop().(int) * s.pop().(int)
+		return s.pop().(int) * s.pop().(int), nil
 	case "-":
 		t := s.pop().(int)
-		return s.pop().(int) - t
+		return s.pop().(int) - t, nil
 	case "/":
 		t := s.pop().(int)
-		return s.pop().(int) / t
+		return s.pop().(int) / t, nil
 	default:
-		log.Fatal("Wrong argument for eval")
+		return -1, errors.New("bad syntax: unsupported operation")
 	}
-
-	return -1
 }
 
-func Calc(exp string) int {
+func Calc(exp string) (int, error) {
 	s := Stack{}
 	numBuf := ""
 
-	pushInt := func (s *Stack, buf *string) {
+	pushInt := func(s *Stack, buf *string) {
 		if *buf != "" {
 			i, err := strconv.Atoi(numBuf)
 			if err != nil {
@@ -135,11 +154,14 @@ func Calc(exp string) int {
 		case ch == ' ':
 			pushInt(&s, &numBuf)
 		default:
-			val := eval(string(ch), &s)
+			val, err := eval(string(ch), &s)
+			if err != nil {
+				return -1, err
+			}
 			s.push(val)
 		}
 
 	}
 
-	return s.pop().(int)
+	return s.pop().(int), nil
 }
