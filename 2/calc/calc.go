@@ -12,7 +12,7 @@ type Stack struct {
 
 func (s *Stack) peek() interface{} {
 	if len(s.data) == 0 {
-		log.Println("stack underflow")
+		log.Fatal("stack underflow")
 		return nil
 	}
 
@@ -21,7 +21,7 @@ func (s *Stack) peek() interface{} {
 
 func (s *Stack) pop() interface{} {
 	if len(s.data) == 0 {
-		log.Println("stack underflow")
+		log.Fatal("stack underflow")
 		return nil
 	}
 
