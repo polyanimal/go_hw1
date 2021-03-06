@@ -3,12 +3,11 @@ package main
 import (
 	"bufio"
 	"flag"
-	. "github.com/polyanimal/go_hw1/1/uniq"
+	"github.com/polyanimal/go_hw1/1/uniq"
 	"io"
 	"log"
 	"os"
 )
-
 
 func main() {
 	cFlag := flag.Bool("c", false, "Count occurrences")
@@ -19,6 +18,7 @@ func main() {
 	sNum := flag.Int("s", 0, "Skip first N symbols")
 
 	flag.Parse()
+
 	if *cFlag && *dFlag || *cFlag && *uFlag || *dFlag && *uFlag {
 		log.Fatal("\nFlags -c, -d and -u are exclusive and can't be used together\n")
 	}
@@ -58,7 +58,7 @@ func main() {
 	}
 
 	ss := scanStrings(in)
-	res := Uniq(ss, Args{
+	res := uniq.Uniq(ss, uniq.Args{
 		Count:           *cFlag,
 		Duplicates:      *dFlag,
 		Uniq:            *uFlag,
@@ -68,7 +68,9 @@ func main() {
 	})
 
 	printSs(res, out)
-	return
+
+	in.Close()
+	out.Close()
 }
 
 func scanStrings(in io.Reader) []string {
@@ -76,7 +78,7 @@ func scanStrings(in io.Reader) []string {
 	scanner := bufio.NewScanner(in)
 
 	for scanner.Scan() {
-		ss = append(ss, scanner.Text()+"\n")
+		ss = append(ss, scanner.Text())
 	}
 
 	return ss
@@ -84,6 +86,6 @@ func scanStrings(in io.Reader) []string {
 
 func printSs(ss []string, out io.Writer) {
 	for _, s := range ss {
-		io.WriteString(out, s)
+		io.WriteString(out, s+"\n")
 	}
 }

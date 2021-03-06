@@ -54,7 +54,7 @@ func Uniq(ss []string, a Args) []string {
 		}
 	}
 
-	if a.Count {
+	if a.Count { // TODO switch
 		for i, s := range output {
 			res = append(res, strconv.Itoa(count[i])+" "+s)
 		}

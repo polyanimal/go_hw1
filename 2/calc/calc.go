@@ -47,16 +47,17 @@ func InfToPosf(exp string) string {
 
 	for _, ch := range exp {
 		c := string(ch)
-		if isNumber(ch) {
+		switch {
+		case isNumber(ch):
 			res += c
-		} else if ch == '(' {
+		case ch == '(':
 			s.push(c)
-		} else if ch == ')' {
+		case ch == ')':
 			for s.peek() != string('(') {
 				res += s.pop().(string)
 			}
 			s.pop()
-		} else { //  + - * /
+		default:
 			if len(s.data) == 0 {
 				s.push(c)
 			} else {
@@ -77,24 +78,18 @@ func InfToPosf(exp string) string {
 	return res
 }
 
-func eval(op string, s * Stack) int {
+func eval(op string, s *Stack) int {
 	switch op {
 	case "+":
-		a := s.pop().(int)
-		b := s.pop().(int)
-		return a + b
+		return s.pop().(int) + s.pop().(int)
 	case "*":
-		a := s.pop().(int)
-		b := s.pop().(int)
-		return a * b
+		return s.pop().(int) * s.pop().(int)
 	case "-":
-		a := s.pop().(int)
-		b := s.pop().(int)
-		return b - a
+		t := s.pop().(int)
+		return s.pop().(int) - t
 	case "/":
-		a := s.pop().(int)
-		b := s.pop().(int)
-		return b / a
+		t := s.pop().(int)
+		return s.pop().(int) / t
 	default:
 		log.Fatal("Wrong argument for eval")
 	}
@@ -104,9 +99,11 @@ func eval(op string, s * Stack) int {
 
 func Calc(exp string) int {
 	s := Stack{}
+	//buf := ""
 
 	for _, ch := range exp {
 		if isNumber(ch) {
+			//buf += string(ch)
 			s.push(toInt(ch))
 		} else {
 			val := eval(string(ch), &s)
