@@ -14,8 +14,12 @@ func (a *Args) key(s string) string {
 	k := s
 
 	fields := strings.Fields(s)
-	if a.FieldsNum != 0 && a.FieldsNum <= len(fields) {
-		k = strings.Join(fields[a.FieldsNum:], " ")
+	for i, pref := range fields {
+		if i >= a.FieldsNum{
+			break
+		}
+		k = strings.TrimLeft(k, " ")
+		k = strings.TrimPrefix(k, pref)
 	}
 
 	if a.CharsNum != 0 && a.CharsNum <= len(k) {

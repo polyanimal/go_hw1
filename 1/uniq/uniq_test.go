@@ -219,7 +219,8 @@ a b xxxThanks.
 a b xxxI love music of kartik.
 a b xxxI love MuSIC of Kartik.`
 
-	s2 := `3 a b xxxI LOVE MUSIC.
+	s2 := `2 a b xxxI LOVE MUSIC.
+1 s v zzzI LoVe MuSiC.
 1 
 2 a b xxxI love MuSIC of Kartik.
 1 a b xxxThanks.
