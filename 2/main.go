@@ -16,5 +16,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(calc.Calc(exp))
+
+	res, err := calc.Calc(exp)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(res)
 }

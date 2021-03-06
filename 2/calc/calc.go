@@ -11,10 +11,20 @@ type Stack struct {
 }
 
 func (s *Stack) peek() interface{} {
+	if len(s.data) == 0 {
+		log.Println("stack underflow")
+		return 0
+	}
+
 	return s.data[len(s.data)-1]
 }
 
 func (s *Stack) pop() interface{} {
+	if len(s.data) == 0 {
+		log.Println("stack underflow")
+		return 0
+	}
+
 	r := s.data[len(s.data)-1]
 	s.data = s.data[:len(s.data)-1]
 
@@ -121,6 +131,9 @@ func eval(op string, s *Stack) (int, error) {
 		return s.pop().(int) - t, nil
 	case "/":
 		t := s.pop().(int)
+		if t == 0 {
+			return -1, errors.New("division by zero")
+		}
 		return s.pop().(int) / t, nil
 	default:
 		return -1, errors.New("bad syntax: unsupported operation")
