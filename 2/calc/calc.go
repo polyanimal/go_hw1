@@ -29,10 +29,6 @@ func isNumber(c rune) bool {
 	return int(c)-'0' >= 0 && int(c)-'0' <= 9
 }
 
-func toInt(c rune) int {
-	return int(c) - '0'
-}
-
 func priority(c string) int {
 	if c == "+" || c == "-" {
 		return 1
@@ -160,7 +156,6 @@ func Calc(exp string) (int, error) {
 			}
 			s.push(val)
 		}
-
 	}
 
 	return s.pop().(int), nil

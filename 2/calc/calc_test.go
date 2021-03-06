@@ -23,21 +23,20 @@ var expressiontests = []struct {
 }
 
 var errortests = []struct {
-	in string
+	in  string
 	err error
 }{
 	{"1)+783*(23) -(1", errors.New("bad syntax: parenthesis don't match")},
-	{"(10-1)*(8 * 356 * (174 - (15 + 1))",  errors.New("bad syntax: parenthesis don't match")},
+	{"(10-1)*(8 * 356 * (174 - (15 + 1))", errors.New("bad syntax: parenthesis don't match")},
 }
 
 var operrortests = []struct {
-	in string
+	in  string
 	err error
 }{
 	{"3^2", errors.New("bad syntax: unsupported operation")},
-	{"123 @ (3956 + 534) & 1",  errors.New("bad syntax: unsupported operation")},
+	{"123 @ (3956 + 534) & 1", errors.New("bad syntax: unsupported operation")},
 }
-
 
 func TestCalc(t *testing.T) {
 	for _, tt := range expressiontests {
